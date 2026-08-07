@@ -99,6 +99,7 @@ class Doc:
     words: int = 0
     nav_hidden: bool = False
     meta: dict = field(default_factory=dict)
+    toc_tokens: list = field(default_factory=list)
 
     @property
     def depth(self) -> int:
@@ -268,6 +269,9 @@ def load_doc(path: Path, md: markdown.Markdown, url_prefix: str) -> Doc:
     )
     doc.body = process_body(rendered, doc.root_prefix)
     doc.summary = first_meta(meta, "summary") or summarize(doc.body)
+    # The `toc` extension fills this during convert; used to build the
+    # per-article table of contents in the right rail.
+    doc.toc_tokens = getattr(md, "toc_tokens", []) or []
 
     if doc.date is None:
         doc.date = date.fromtimestamp(path.stat().st_mtime)
@@ -410,6 +414,52 @@ def post_list_html(posts: list[Doc], prefix: str) -> str:
             <p class="post-summary">{html.escape(post.summary)}</p>
           </article>""")
     return "\n          ".join(cards)
+
+
+# Only H2 and H3 go in the table of contents — the post's "titles and
+# subtitles". A post needs at least this many before a TOC is worth showing.
+TOC_MIN_ENTRIES = 2
+
+
+def _flatten_toc(tokens: list, out: list) -> None:
+    for token in tokens:
+        if token.get("level") in (2, 3) and token.get("id"):
+            out.append((token["level"], token["id"], token.get("name", "")))
+        _flatten_toc(token.get("children") or [], out)
+
+
+def toc_html(toc_tokens: list) -> str:
+    """A table of contents for one article, or "" if it has too few headings.
+
+    Emits a floating button (shown only on narrow screens) plus a panel of
+    links. The panel is a sticky rail on wide screens and a popup on mobile —
+    which is which is decided entirely in CSS, so this markup is the same for
+    both. Purely additive: pages without enough headings get no TOC at all.
+    """
+    links: list[tuple[int, str, str]] = []
+    _flatten_toc(toc_tokens, links)
+    if len(links) < TOC_MIN_ENTRIES:
+        return ""
+
+    items = []
+    for level, anchor, name in links:
+        cls = "toc-l2" if level == 2 else "toc-l3"
+        items.append(f'<a class="{cls}" href="#{html.escape(anchor)}">{html.escape(name)}</a>')
+    link_html = "\n        ".join(items)
+
+    list_icon = ('<path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01" '
+                 'stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>')
+    return f"""<aside class="toc" aria-label="On this page">
+    <button class="toc-fab" type="button" aria-expanded="false" aria-controls="toc-panel" aria-label="On this page">
+      <svg viewBox="0 0 24 24" aria-hidden="true">{list_icon}</svg>
+    </button>
+    <div class="toc-panel" id="toc-panel">
+      <p class="toc-heading">On this page</p>
+      <nav class="toc-links">
+        {link_html}
+      </nav>
+    </div>
+  </aside>"""
 
 
 # ─────────────────────────────────────────────────────────────
@@ -684,11 +734,13 @@ def build(include_drafts: bool = False) -> None:
 
     version = asset_version()
 
-    def page_shell(*, doc: Doc | None, prefix: str, title: str, description: str, body: str) -> str:
+    def page_shell(*, doc: Doc | None, prefix: str, title: str, description: str,
+                   body: str, toc: str = "") -> str:
         return render(
             base,
             root=prefix,
             v=version,
+            toc=toc,
             page_title=html.escape(title),
             site_title=html.escape(site_title),
             description=html.escape(description),
@@ -732,6 +784,7 @@ def build(include_drafts: bool = False) -> None:
             doc=doc, prefix=doc.root_prefix,
             title=f"{doc.title} · {site_title}",
             description=doc.summary, body=body,
+            toc=toc_html(doc.toc_tokens) if is_post else "",
         ))
         print(f"  ✓ {doc.url}")
 

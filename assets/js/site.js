@@ -86,4 +86,34 @@
       current.scrollIntoView({ block: 'center' });
     }
   }
+
+  // ─── Table-of-contents popup (mobile only) ─────────────────
+  // No-ops on pages without a TOC (home, about, short posts). The wide-screen
+  // rail needs no JS — these handlers only drive the bottom-left popup.
+  var toc = document.getElementById('toc-panel') ? document.querySelector('.toc') : null;
+  var tocFab = document.querySelector('.toc-fab');
+
+  if (toc && tocFab) {
+    var closeToc = function () {
+      toc.classList.remove('open');
+      tocFab.setAttribute('aria-expanded', 'false');
+    };
+
+    tocFab.addEventListener('click', function (event) {
+      event.stopPropagation();
+      var open = toc.classList.toggle('open');
+      tocFab.setAttribute('aria-expanded', String(open));
+    });
+
+    // Close after picking a heading, on an outside tap, or on Escape.
+    toc.addEventListener('click', function (event) {
+      if (event.target.closest('a')) closeToc();
+    });
+    document.addEventListener('click', function (event) {
+      if (toc.classList.contains('open') && !event.target.closest('.toc')) closeToc();
+    });
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') closeToc();
+    });
+  }
 })();
