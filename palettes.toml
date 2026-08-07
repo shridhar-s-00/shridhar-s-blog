@@ -1,0 +1,131 @@
+# ─────────────────────────────────────────────────────────────
+# Colour palettes. Pick one with `palette = "..."` in site.toml.
+#
+# Each palette uses its theme's own light and dark variants — Rosé Pine
+# Dawn and Main, Catppuccin Latte and Mocha, Tokyo Night Day and Night —
+# so the two modes are genuinely different palettes rather than one set
+# of hues brightened and dimmed.
+#
+# A few values are adapted from the originals: these themes were designed
+# for code editors, where text is large and monospaced. Some accents are
+# darkened for light mode so body text and small headings stay legible
+# against a light background.
+# ─────────────────────────────────────────────────────────────
+
+
+# ─── Rosé Pine ───────────────────────────────────────────────
+# Dawn (light) / Main (dark). Muted, warm, low-glare.
+
+[rose-pine]
+# Syntax highlighting theme for fenced code blocks.
+code_light = "lovelace"
+code_dark  = "dracula"
+
+bg        = { light = "#faf4ed", dark = "#191724" }
+surface   = { light = "#fffaf3", dark = "#1f1d2e" }
+text      = { light = "#575279", dark = "#e0def4" }
+muted     = { light = "#6e6a86", dark = "#908caa" }
+border    = { light = "#e4dcd4", dark = "#2a2740" }
+
+h1        = { light = "#7c5fa0", dark = "#c4a7e7" }   # iris
+h2        = { light = "#b4637a", dark = "#ebbcba" }   # love / rose
+h3        = { light = "#286983", dark = "#9ccfd8" }   # pine / foam
+
+bold      = { light = "#403a5c", dark = "#f2f0ff" }
+italic    = { light = "#6e6a86", dark = "#b3aecb" }
+
+mark_bg   = { light = "#f6e0c4", dark = "#423c5a" }
+mark_text = { light = "#6f4718", dark = "#f6c177" }   # gold
+
+link      = { light = "#7c5fa0", dark = "#c4a7e7" }
+
+
+# ─── Catppuccin ──────────────────────────────────────────────
+# Latte (light) / Mocha (dark). Pastel, higher contrast.
+
+[catppuccin]
+# Syntax highlighting theme for fenced code blocks.
+code_light = "friendly"
+code_dark  = "one-dark"
+
+bg        = { light = "#eff1f5", dark = "#1e1e2e" }
+surface   = { light = "#e6e9ef", dark = "#27273c" }
+text      = { light = "#4c4f69", dark = "#cdd6f4" }
+muted     = { light = "#66697e", dark = "#a6adc8" }
+border    = { light = "#ccd0da", dark = "#313244" }
+
+h1        = { light = "#8839ef", dark = "#cba6f7" }   # mauve
+h2        = { light = "#1e66f5", dark = "#89b4fa" }   # blue
+h3        = { light = "#0f7b81", dark = "#94e2d5" }   # teal
+
+bold      = { light = "#383a4d", dark = "#eef1fd" }
+italic    = { light = "#646894", dark = "#b4befe" }   # lavender
+
+mark_bg   = { light = "#f4e5c2", dark = "#45475a" }
+mark_text = { light = "#77530f", dark = "#f9e2af" }   # yellow
+
+link      = { light = "#175ae0", dark = "#89b4fa" }
+
+
+# ─── Tokyo Night ─────────────────────────────────────────────
+# Day (light) / Night (dark). Cooler, more saturated.
+
+[tokyo-night]
+# Syntax highlighting theme for fenced code blocks.
+code_light = "xcode"
+code_dark  = "github-dark"
+
+bg        = { light = "#e9e9ee", dark = "#1a1b26" }
+surface   = { light = "#e1e2e7", dark = "#24283b" }
+text      = { light = "#343b58", dark = "#c0caf5" }
+muted     = { light = "#5a6296", dark = "#9aa5ce" }
+border    = { light = "#ccd0e0", dark = "#2a2e42" }
+
+h1        = { light = "#7847bd", dark = "#bb9af7" }   # purple / magenta
+h2        = { light = "#2e7de9", dark = "#7aa2f7" }   # blue
+h3        = { light = "#587539", dark = "#9ece6a" }   # green
+
+bold      = { light = "#1f2335", dark = "#dbe1ff" }
+italic    = { light = "#5a6296", dark = "#a9b1d6" }
+
+mark_bg   = { light = "#ead9b0", dark = "#3a3f5e" }
+mark_text = { light = "#6b5312", dark = "#e0af68" }   # yellow
+
+link      = { light = "#1f5fbe", dark = "#7aa2f7" }
+
+
+# ─────────────────────────────────────────────────────────────
+# Add your own theme
+# ─────────────────────────────────────────────────────────────
+# 1. Copy the block below, rename [my-theme] to whatever you like.
+# 2. Fill in every colour with a `light` and a `dark` value.
+# 3. Run `./build --check` to confirm the colours are readable.
+# 4. Point at it in site.toml:  palette = "my-theme"
+#    (or mix it:  palette = { light = "my-theme", dark = "tokyo-night" })
+#
+# `code_light` / `code_dark` name a Pygments style for code blocks. List them
+# all with:  .venv/bin/python -c "from pygments.styles import get_all_styles as g; print(*sorted(g()))"
+#
+# Uncomment to use:
+#
+# [my-theme]
+# code_light = "default"        # any Pygments style name
+# code_dark  = "monokai"
+#
+# bg        = { light = "#ffffff", dark = "#101010" }   # page background
+# surface   = { light = "#f2f2f2", dark = "#1b1b1b" }   # sidebar, code, cards
+# text      = { light = "#1c1c1c", dark = "#e6e6e6" }   # body text
+# muted     = { light = "#666666", dark = "#9a9a9a" }   # dates, captions
+# border    = { light = "#e2e2e2", dark = "#2a2a2a" }   # hairlines
+#
+# h1        = { light = "#1a5fb4", dark = "#8ab4f8" }   # heading level 1
+# h2        = { light = "#2a7d5f", dark = "#7ad0aa" }   # heading level 2
+# h3        = { light = "#9a5b1f", dark = "#e0a86a" }   # heading level 3
+#
+# bold      = { light = "#111111", dark = "#ffffff" }   # **bold**
+# italic    = { light = "#555555", dark = "#bbbbbb" }   # *italic*
+#
+# mark_bg   = { light = "#fdf0a8", dark = "#5c4d00" }   # ==highlight== background
+# mark_text = { light = "#3d3400", dark = "#ffeea6" }   # ==highlight== text
+#
+# link      = { light = "#1a5fb4", dark = "#8ab4f8" }   # links

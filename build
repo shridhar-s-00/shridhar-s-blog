@@ -1,0 +1,16 @@
+#!/bin/sh
+# Build the site into dist/.  Pass --serve to preview, --drafts to include drafts.
+set -e
+cd "$(dirname "$0")"
+
+if [ -x .venv/bin/python ]; then
+  PY=.venv/bin/python
+else
+  echo "No .venv found — creating one and installing dependencies…"
+  python3 -m venv .venv
+  .venv/bin/pip install --quiet --upgrade pip
+  .venv/bin/pip install --quiet -r requirements.txt
+  PY=.venv/bin/python
+fi
+
+exec "$PY" build.py "$@"

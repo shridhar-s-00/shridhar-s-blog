@@ -1,0 +1,566 @@
+/* ─────────────────────────────────────────────────────────────
+   Layout and typography.
+   Colours all come from assets/css/theme.css, which build.py
+   generates from the [colors] table in site.toml.
+   ───────────────────────────────────────────────────────────── */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+:root {
+  --sidebar-width: 17rem;
+  --measure: 68ch;
+  --radius: 10px;
+  --font-body: ui-serif, Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+  --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { max-width: 100%; height: auto; }
+
+a { color: var(--link); text-underline-offset: 2px; text-decoration-thickness: 1px; }
+a:hover { text-decoration-thickness: 2px; }
+
+:focus-visible {
+  outline: 2px solid var(--link);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  background: var(--bg);
+  color: var(--text);
+  padding: 0.6rem 1rem;
+  font-family: var(--font-ui);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.skip-link:focus { left: 0.5rem; top: 0.5rem; }
+
+
+/* ─── Shell ─────────────────────────────────────────────────── */
+
+.layout { display: flex; align-items: flex-start; }
+
+.sidebar {
+  flex: 0 0 var(--sidebar-width);
+  width: var(--sidebar-width);
+  height: 100vh;
+  /* dvh excludes the browser's own toolbars on mobile, which 100vh sits
+     underneath — without this the bottom row is hidden behind them. */
+  height: 100dvh;
+  position: sticky;
+  top: 0;
+  border-right: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.sidebar-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+  padding: 1.75rem 1.25rem 1rem;
+  /* Clear the home indicator on phones with a gesture bar. */
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  gap: 1.25rem;
+}
+
+.brand { font-family: var(--font-ui); }
+
+.brand-title {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text);
+  text-decoration: none;
+  letter-spacing: -0.01em;
+}
+.brand-title:hover { color: var(--link); }
+
+.brand-tagline {
+  margin: 0.3rem 0 0;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+
+/* ─── Navigation ────────────────────────────────────────────── */
+
+/* Sized by its content, not pinned to the scrollport — otherwise a long post
+   list overflows the nav box and spills past the footer below it. */
+.nav {
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.nav-heading {
+  margin: 1.1rem 0 0.35rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--muted);
+}
+
+.nav-filter {
+  width: 100%;
+  padding: 0.4rem 0.6rem;
+  margin-bottom: 0.5rem;
+  font: inherit;
+  font-size: 0.82rem;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+}
+.nav-filter::placeholder { color: var(--muted); }
+
+.nav-posts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.nav-link {
+  display: block;
+  padding: 0.4rem 0.6rem;
+  border-radius: 7px;
+  color: var(--text);
+  text-decoration: none;
+  border-left: 2px solid transparent;
+}
+.nav-link:hover { background: var(--bg); color: var(--link); }
+
+.nav-link.current {
+  background: var(--bg);
+  border-left-color: var(--link);
+  color: var(--link);
+  font-weight: 600;
+}
+
+.nav-title { display: block; line-height: 1.35; }
+
+.nav-date {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-top: 0.1rem;
+}
+
+.nav-empty {
+  font-size: 0.82rem;
+  color: var(--muted);
+  padding: 0.3rem 0.6rem;
+  margin: 0;
+}
+
+.sidebar-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--border);
+  /* Stays put however long the post list grows. */
+  position: sticky;
+  bottom: 0;
+  margin-top: auto;
+  background: var(--surface);
+}
+
+.socials { display: flex; gap: 0.15rem; flex-wrap: wrap; }
+
+.social {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 7px;
+  color: var(--muted);
+}
+.social:hover { color: var(--link); background: var(--bg); }
+.social svg { width: 1.05rem; height: 1.05rem; fill: currentColor; }
+
+
+/* ─── Theme toggle ──────────────────────────────────────────── */
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.6rem;
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  color: var(--muted);
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  cursor: pointer;
+}
+.theme-toggle:hover { color: var(--link); border-color: var(--link); }
+.theme-toggle svg { width: 1rem; height: 1rem; }
+
+.icon-moon { display: none; }
+:root[data-theme="dark"] .icon-sun { display: none; }
+:root[data-theme="dark"] .icon-moon { display: block; }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .icon-sun { display: none; }
+  :root:not([data-theme="light"]) .icon-moon { display: block; }
+}
+
+
+/* ─── Mobile top bar (hidden on desktop) ────────────────────── */
+
+.topbar { display: none; }
+.scrim { display: none; }
+
+.icon-button {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  color: var(--text);
+  background: none;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.icon-button:hover { color: var(--link); }
+.icon-button svg { width: 1.35rem; height: 1.35rem; }
+
+
+/* ─── Main column ───────────────────────────────────────────── */
+
+main {
+  flex: 1;
+  min-width: 0;
+  padding: 3.5rem 3rem 2rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.prose, .home-intro, .post-list, .footer { width: 100%; max-width: var(--measure); }
+
+.doc-title {
+  font-family: var(--font-ui);
+  font-size: clamp(1.85rem, 1.3rem + 2.2vw, 2.6rem);
+  line-height: 1.15;
+  letter-spacing: -0.022em;
+  color: var(--h1);
+  margin: 0 0 0.5rem;
+}
+
+.lede {
+  font-size: 1.15rem;
+  color: var(--muted);
+  margin: 0 0 1rem;
+}
+
+.post-meta {
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin: 0 0 2.25rem;
+}
+
+
+/* ─── Post list on the home page ────────────────────────────── */
+
+.home-intro { margin-bottom: 2.5rem; }
+
+.post-list { display: flex; flex-direction: column; }
+
+.post-card {
+  padding: 1.4rem 0;
+  border-top: 1px solid var(--border);
+}
+.post-card:last-child { border-bottom: 1px solid var(--border); }
+
+.post-card-title {
+  font-family: var(--font-ui);
+  font-size: 1.3rem;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  margin: 0 0 0.3rem;
+}
+.post-card-title a { color: var(--h2); text-decoration: none; }
+.post-card-title a:hover { text-decoration: underline; }
+
+.post-card .post-meta { margin-bottom: 0.5rem; }
+.post-summary { margin: 0; color: var(--muted); font-size: 0.98rem; }
+
+.empty { color: var(--muted); }
+
+
+/* ─── Prose: headings, emphasis, highlights ─────────────────── */
+
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+  font-family: var(--font-ui);
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  scroll-margin-top: 5rem;
+}
+
+/* Level 1 — the post title uses .doc-title; an h1 inside the body
+   is rare but styled to match. */
+.prose h1 { font-size: 1.95rem; color: var(--h1); margin: 2.6rem 0 0.9rem; }
+
+.prose h2 {
+  font-size: 1.5rem;
+  color: var(--h2);
+  margin: 2.4rem 0 0.8rem;
+  padding-bottom: 0.28rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.prose h3 { font-size: 1.2rem; color: var(--h3); margin: 1.9rem 0 0.6rem; }
+
+/* Levels 4–6 stay neutral so the three coloured levels keep their meaning. */
+.prose h4, .prose h5, .prose h6 {
+  font-size: 1.02rem;
+  color: var(--text);
+  margin: 1.6rem 0 0.5rem;
+}
+
+.prose > *:first-child { margin-top: 0; }
+
+.prose p { margin: 0 0 1.15rem; }
+
+.prose strong, .prose b { color: var(--bold); font-weight: 700; }
+.prose em, .prose i { color: var(--italic); font-style: italic; }
+
+.prose mark {
+  background: var(--mark-bg);
+  color: var(--mark-text);
+  padding: 0.08em 0.28em;
+  border-radius: 4px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.prose ul, .prose ol { margin: 0 0 1.15rem; padding-left: 1.4rem; }
+.prose li { margin-bottom: 0.35rem; }
+.prose li::marker { color: var(--muted); }
+
+.prose del { color: var(--muted); }
+
+.prose li.task-item {
+  list-style: none;
+  margin-left: -1.35rem;
+}
+.prose li.task-item input {
+  margin-right: 0.5rem;
+  accent-color: var(--link);
+  vertical-align: baseline;
+}
+
+.prose blockquote {
+  margin: 1.5rem 0;
+  padding: 0.2rem 0 0.2rem 1.1rem;
+  border-left: 3px solid var(--h3);
+  color: var(--muted);
+  font-style: italic;
+}
+.prose blockquote p:last-child { margin-bottom: 0; }
+
+.prose hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 2.5rem 0;
+}
+
+/* Images and captions */
+.prose figure { margin: 1.9rem 0; }
+.prose figure img { display: block; width: 100%; border-radius: var(--radius); }
+
+.prose figcaption {
+  margin-top: 0.55rem;
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* Downloadable files: ![](…) style link to a PDF and friends */
+.download-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 0.9rem;
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  text-decoration: none;
+  color: var(--link);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.download-link::before {
+  content: "";
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+  background: currentColor;
+  -webkit-mask: var(--download-icon) center / contain no-repeat;
+  mask: var(--download-icon) center / contain no-repeat;
+}
+.download-link:hover { border-color: var(--link); background: var(--bg); }
+
+:root {
+  --download-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3'/%3E%3C/svg%3E");
+}
+
+/* Code */
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 0.1em 0.35em;
+}
+
+.prose pre {
+  margin: 1.5rem 0;
+  padding: 1rem 1.1rem;
+  overflow-x: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  line-height: 1.55;
+}
+.prose pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 0.86rem;
+}
+.codehilite { background: none !important; }
+
+/* Tables */
+.prose table {
+  width: 100%;
+  margin: 1.5rem 0;
+  border-collapse: collapse;
+  font-family: var(--font-ui);
+  font-size: 0.92rem;
+}
+.prose th, .prose td {
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--border);
+  text-align: left;
+}
+.prose th { background: var(--surface); color: var(--h3); font-weight: 600; }
+
+/* Wide content should scroll inside itself, never the page */
+.prose .table-scroll { overflow-x: auto; }
+
+.prose sup a { text-decoration: none; }
+.footnote { font-size: 0.9rem; color: var(--muted); }
+.footnote hr { margin-top: 3rem; }
+
+.footer {
+  margin-top: auto;
+  padding-top: 3rem;
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+
+/* ─── Mobile ────────────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+  body { font-size: 1.02rem; }
+
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    padding: 0.4rem 0.6rem;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .topbar-title {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--text);
+    text-decoration: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 50;
+    width: min(20rem, 84vw);
+    flex-basis: auto;
+    transform: translateX(-100%);
+    transition: transform 0.22s ease;
+    box-shadow: 0 0 40px rgb(0 0 0 / 0.18);
+  }
+  .sidebar.open { transform: translateX(0); }
+
+  .scrim {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    background: rgb(0 0 0 / 0.45);
+  }
+  .scrim[hidden] { display: none; }
+
+  /* The sidebar's own theme button is reachable in the drawer;
+     the top bar carries one too for one-tap switching. */
+  main { padding: 2rem 1.25rem 1.5rem; }
+
+  .doc-title { margin-bottom: 0.4rem; }
+  .post-meta { margin-bottom: 1.75rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+  html { scroll-behavior: auto; }
+}
+
+@media print {
+  .sidebar, .topbar, .scrim, .footer { display: none !important; }
+  main { padding: 0; }
+  body { font-size: 11pt; }
+}

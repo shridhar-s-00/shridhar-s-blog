@@ -1,0 +1,71 @@
+# ─────────────────────────────────────────────────────────────
+# Site configuration. Edit this file, then run ./build.
+#
+# Note on ordering: plain settings like the ones below must stay ABOVE
+# the [[socials]] and [colors] sections. In TOML, once a [section] starts,
+# everything after it belongs to that section.
+# ─────────────────────────────────────────────────────────────
+
+title = "Shridhar"
+tagline = "Writing about things I'm working on"
+author = "Shridhar"
+
+# Shown on the home page above the post list. Plain text only.
+intro = "Hello. This is where I keep my notes and longer writing."
+
+# Colour palette: "rose-pine", "catppuccin", or "tokyo-night".
+#
+# One name uses that palette for both modes:
+#     palette = "rose-pine"
+#
+# Or mix them — a different palette for light and for dark:
+palette = { light = "tokyo-night", dark = "tokyo-night" }
+#
+# Mixing is safe: the two modes never show at once, and each one is filled
+# in entirely from its own palette. See palettes.toml.
+
+
+# ─── Social links ────────────────────────────────────────────
+# Delete any you don't want; add as many as you like.
+#
+# `url` should be the full address including https:// — without it a browser
+# treats the address as a page on this site. (The build adds it if you forget.)
+#
+# `icon` picks the built-in SVG, and isn't case-sensitive:
+#   github, twitter, linkedin, instagram, youtube, mastodon, email, rss,
+#   link (generic fallback)
+
+[[socials]]
+name = "GitHub"
+url = "https://github.com/shridhar-s-00"
+icon = "github"
+
+[[socials]]
+name = "LinkedIn"
+url = "https://www.linkedin.com/in/shridhar-sriram"
+icon = "linkedin"
+
+[[socials]]
+name = "Email"
+url = "mailto:shridhar.s@outlook.in"
+icon = "email"
+
+[[socials]]
+name = "Youtube"
+url = "https://www.youtube.com/@shridhar-sriram"
+icon = "youtube"
+
+# ─── Individual colour overrides (optional) ──────────────────
+# Uncomment [colors] to change specific colours. Anything set here wins
+# over the palette; anything left out falls back to it. Every value needs
+# both a `light` and a `dark` variant.
+#
+# Names: bg, surface, text, muted, border, h1, h2, h3, bold, italic,
+#        mark_bg, mark_text, link
+#
+# [colors]
+# h1        = { light = "#7c5fa0", dark = "#c4a7e7" }
+# h2        = { light = "#b4637a", dark = "#ebbcba" }
+# h3        = { light = "#286983", dark = "#9ccfd8" }
+# mark_bg   = { light = "#f6e0c4", dark = "#423c5a" }
+# mark_text = { light = "#6f4718", dark = "#f6c177" }

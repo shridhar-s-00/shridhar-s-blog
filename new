@@ -1,0 +1,30 @@
+#!/bin/sh
+# Start a new post:  ./new "The title of my post"
+set -e
+cd "$(dirname "$0")"
+
+if [ -z "$1" ]; then
+  echo "Usage: ./new \"The title of my post\""
+  exit 1
+fi
+
+SLUG=$(printf '%s' "$1" | tr '[:upper:]' '[:lower:]' | sed -e 's/[^a-z0-9]\{1,\}/-/g' -e 's/^-//' -e 's/-$//')
+FILE="content/posts/$SLUG.md"
+
+if [ -e "$FILE" ]; then
+  echo "$FILE already exists."
+  exit 1
+fi
+
+cat > "$FILE" <<EOF
+---
+Title: $1
+Date: $(date +%Y-%m-%d)
+Draft: true
+---
+
+Start writing here.
+EOF
+
+echo "Created $FILE"
+echo "It's marked as a draft — remove the 'Draft: true' line when you're ready to publish."
