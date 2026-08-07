@@ -416,50 +416,62 @@ def post_list_html(posts: list[Doc], prefix: str) -> str:
     return "\n          ".join(cards)
 
 
-# Only H2 and H3 go in the table of contents — the post's "titles and
-# subtitles". A post needs at least this many before a TOC is worth showing.
+# A table of contents needs at least this many entries to be worth showing.
 TOC_MIN_ENTRIES = 2
 
 
 def _flatten_toc(tokens: list, out: list) -> None:
+    """Collect (level, "#anchor", name) for every H2/H3 in a rendered article."""
     for token in tokens:
         if token.get("level") in (2, 3) and token.get("id"):
-            out.append((token["level"], token["id"], token.get("name", "")))
+            out.append((token["level"], "#" + token["id"], token.get("name", "")))
         _flatten_toc(token.get("children") or [], out)
 
 
-def toc_html(toc_tokens: list) -> str:
-    """A table of contents for one article, or "" if it has too few headings.
+def _toc_markup(entries: list, heading: str) -> str:
+    """Render a TOC panel from a list of (level, href, label), or "" if too short.
 
     Emits a floating button (shown only on narrow screens) plus a panel of
     links. The panel is a sticky rail on wide screens and a popup on mobile —
     which is which is decided entirely in CSS, so this markup is the same for
-    both. Purely additive: pages without enough headings get no TOC at all.
+    both. Purely additive: pages with too few entries get no TOC at all.
     """
-    links: list[tuple[int, str, str]] = []
-    _flatten_toc(toc_tokens, links)
-    if len(links) < TOC_MIN_ENTRIES:
+    if len(entries) < TOC_MIN_ENTRIES:
         return ""
 
     items = []
-    for level, anchor, name in links:
+    for level, href, label in entries:
         cls = "toc-l2" if level == 2 else "toc-l3"
-        items.append(f'<a class="{cls}" href="#{html.escape(anchor)}">{html.escape(name)}</a>')
+        items.append(f'<a class="{cls}" href="{html.escape(href)}">{html.escape(label)}</a>')
     link_html = "\n        ".join(items)
 
+    heading = html.escape(heading)
     list_icon = ('<path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01" '
                  'stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>')
-    return f"""<aside class="toc" aria-label="On this page">
-    <button class="toc-fab" type="button" aria-expanded="false" aria-controls="toc-panel" aria-label="On this page">
+    return f"""<aside class="toc" aria-label="{heading}">
+    <button class="toc-fab" type="button" aria-expanded="false" aria-controls="toc-panel" aria-label="{heading}">
       <svg viewBox="0 0 24 24" aria-hidden="true">{list_icon}</svg>
     </button>
     <div class="toc-panel" id="toc-panel">
-      <p class="toc-heading">On this page</p>
+      <p class="toc-heading">{heading}</p>
       <nav class="toc-links">
         {link_html}
       </nav>
     </div>
   </aside>"""
+
+
+def toc_html(toc_tokens: list) -> str:
+    """The in-page table of contents for an article (post or standalone page)."""
+    links: list[tuple[int, str, str]] = []
+    _flatten_toc(toc_tokens, links)
+    return _toc_markup(links, "On this page")
+
+
+def home_toc_html(posts: list[Doc], prefix: str = "") -> str:
+    """The home page isn't an article, so its "contents" is the list of posts."""
+    entries = [(2, f"{prefix}{post.url}", post.title) for post in posts]
+    return _toc_markup(entries, "Posts")
 
 
 # ─────────────────────────────────────────────────────────────
@@ -763,6 +775,7 @@ def build(include_drafts: bool = False) -> None:
     write(DIST / "index.html", page_shell(
         doc=None, prefix="", title=site_title,
         description=config.get("tagline", ""), body=home_body,
+        toc=home_toc_html(posts, ""),
     ))
     print(f"  ✓ index.html ({len(posts)} posts)")
 
@@ -784,7 +797,7 @@ def build(include_drafts: bool = False) -> None:
             doc=doc, prefix=doc.root_prefix,
             title=f"{doc.title} · {site_title}",
             description=doc.summary, body=body,
-            toc=toc_html(doc.toc_tokens) if is_post else "",
+            toc=toc_html(doc.toc_tokens),
         ))
         print(f"  ✓ {doc.url}")
 

@@ -2,14 +2,26 @@
 Title: About
 ---
 
-Write a few paragraphs about yourself here.
+Write a short introduction here — who you are and what this page is about.
+Replace all of this with your own words; the headings below are just a
+starting point.
 
-This is a **standalone page** rather than a post — it lives in `content/pages/`
-instead of `content/posts/`, so it shows up at the top of the sidebar with the
-other pages rather than in the list of writing, and it doesn't carry a date.
+## About me
 
-Add as many of these as you like: a `now` page, a projects page, a reading list.
-Each one is just another markdown file in that folder.
+A paragraph or two about yourself — what you do, what you're interested in,
+whatever you'd like visitors to know.
 
-If you'd rather a page didn't appear in the sidebar at all, add `Nav: false` to
-the block at the top of the file.
+## What I write about
+
+The kinds of things you post here: projects, notes, essays, whatever you like.
+
+## Elsewhere
+
+Where else to find you. Your social links are already in the sidebar, so this
+section is optional.
+
+<!--
+The "On this page" list on the right is built from the ## headings above.
+Add or remove headings and it updates when you run ./build. A page needs at
+least two headings before the list appears.
+-->
