@@ -85,8 +85,8 @@ h1        = { light = "#7847bd", dark = "#bb9af7" }   # purple / magenta
 h2        = { light = "#2e7de9", dark = "#7aa2f7" }   # blue
 h3        = { light = "#587539", dark = "#9ece6a" }   # green
 
-bold      = { light = "#1f2335", dark = "#dbe1ff" }
-italic    = { light = "#5a6296", dark = "#a9b1d6" }
+bold      = { light = "#d97769", dark = "#ce7277" }
+italic    = { light = "#67a15b", dark = "#9ebe7f" }
 
 mark_bg   = { light = "#ead9b0", dark = "#3a3f5e" }
 mark_text = { light = "#6b5312", dark = "#e0af68" }   # yellow
