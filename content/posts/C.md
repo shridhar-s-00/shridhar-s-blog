@@ -1,5 +1,5 @@
 ---
-Title: I'm writing a dynamic list in C. (Sort of)
+Title: Linked lists in C
 Date: 2026-08-10
 Summary: I'm writing a list that can store any generic value. I'm doing this to learn structs, unions, pointers, generic programming and some basic DSA.
 ---
