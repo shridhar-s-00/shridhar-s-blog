@@ -74,6 +74,13 @@
         if (match) shown++;
       });
 
+      // Hide a folder group (heading + list) when none of its posts match,
+      // so you don't see empty "C", "Python"… headings while searching.
+      document.querySelectorAll('.nav-group').forEach(function (grp) {
+        var anyVisible = grp.querySelector('.nav-posts li:not([hidden])');
+        grp.hidden = !anyVisible;
+      });
+
       if (noResults) noResults.hidden = shown !== 0;
     });
   }

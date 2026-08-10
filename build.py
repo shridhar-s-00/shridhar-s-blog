@@ -37,7 +37,7 @@ DATE_FORMATS = ("%Y-%m-%d", "%d-%m-%Y", "%d/%m/%Y", "%B %d, %Y", "%d %B %Y")
 
 COLOR_ROLES = (
     "bg", "surface", "text", "muted", "border",
-    "h1", "h2", "h3", "bold", "italic",
+    "title", "h1", "h2", "h3", "bold", "italic",
     "mark_bg", "mark_text", "link",
 )
 
@@ -100,6 +100,12 @@ class Doc:
     nav_hidden: bool = False
     meta: dict = field(default_factory=dict)
     toc_tokens: list = field(default_factory=list)
+    folder: str = ""               # "" for loose posts, else the folder name (e.g. "c")
+
+    @property
+    def folder_label(self) -> str:
+        """Human-readable folder name for the sidebar (e.g. "c" → "C")."""
+        return self.folder.replace("-", " ").replace("_", " ").title()
 
     @property
     def depth(self) -> int:
@@ -246,7 +252,7 @@ def summarize(body: str, limit: int = 200) -> str:
 # Loading content
 # ─────────────────────────────────────────────────────────────
 
-def load_doc(path: Path, md: markdown.Markdown, url_prefix: str) -> Doc:
+def load_doc(path: Path, md: markdown.Markdown, url_prefix: str, folder: str = "") -> Doc:
     md.reset()
     raw = path.read_text(encoding="utf-8")
     rendered = md.convert(raw)
@@ -266,6 +272,7 @@ def load_doc(path: Path, md: markdown.Markdown, url_prefix: str) -> Doc:
         nav_hidden=first_meta(meta, "nav").lower() in ("false", "no", "hide"),
         words=len(re.findall(r"\w+", re.sub(r"<[^>]+>", " ", rendered))),
         meta=meta,
+        folder=folder,
     )
     doc.body = process_body(rendered, doc.root_prefix)
     doc.summary = first_meta(meta, "summary") or summarize(doc.body)
@@ -281,9 +288,24 @@ def load_doc(path: Path, md: markdown.Markdown, url_prefix: str) -> Doc:
 def load_all(include_drafts: bool) -> tuple[list[Doc], list[Doc]]:
     md = make_markdown()
 
+    # (path, folder, url_prefix) for every post: loose ones directly in
+    # content/posts/, plus one level of folders (content/posts/<folder>/*.md).
+    post_sources = [(p, "", "posts/") for p in (CONTENT / "posts").glob("*.md")]
+    for path in (CONTENT / "posts").glob("*/*.md"):
+        folder = path.parent.name
+        if folder.startswith("."):        # skip .obsidian and other hidden dirs
+            continue
+        post_sources.append((path, folder, f"posts/{folder}/"))
+
+    # Only one level of nesting is supported — warn about anything deeper.
+    for path in (CONTENT / "posts").glob("*/*/*.md"):
+        if not any(part.startswith(".") for part in path.relative_to(CONTENT / "posts").parts):
+            print(f"  ! ignoring {path.relative_to(CONTENT)} — folders can't be nested "
+                  "more than one level deep")
+
     posts = []
-    for path in sorted((CONTENT / "posts").glob("*.md")):
-        doc = load_doc(path, md, "posts/")
+    for path, folder, url_prefix in sorted(post_sources, key=lambda s: str(s[0])):
+        doc = load_doc(path, md, url_prefix, folder=folder)
         if doc.draft and not include_drafts:
             print(f"  · skipping draft: {path.name}")
             continue
@@ -364,7 +386,8 @@ def social_links(socials: list[dict]) -> str:
 
 
 def nav_html(posts: list[Doc], pages: list[Doc], current: Doc | None, prefix: str) -> str:
-    """The list of every post, plus any standalone pages."""
+    """Site nav: Home, standalone pages, then posts — loose ones under "Posts"
+    and each folder as its own group."""
     lines = []
 
     home_class = ' class="nav-link current"' if current is None else ' class="nav-link"'
@@ -385,18 +408,38 @@ def nav_html(posts: list[Doc], pages: list[Doc], current: Doc | None, prefix: st
 
     if not posts:
         lines.append('<p class="nav-empty">No posts yet.</p>')
-    else:
-        lines.append('<ul class="nav-posts">')
-        for post in posts:
+        return "\n          ".join(lines)
+
+    def group(label: str, group_posts: list[Doc]) -> str:
+        block = ['<div class="nav-group">']
+        if label:
+            block.append(f'<div class="nav-subheading">{html.escape(label)}</div>')
+        block.append('<ul class="nav-posts">')
+        for post in group_posts:
             active = " current" if current is post else ""
-            lines.append(
+            block.append(
                 f'<li><a href="{prefix}{post.url}" class="nav-link{active}">'
                 f'<span class="nav-title">{html.escape(post.title)}</span>'
                 f'<span class="nav-date">{post.date_display}</span></a></li>'
             )
-        lines.append("</ul>")
-        lines.append('<p class="nav-empty" id="nav-no-results" hidden>No posts match.</p>')
+        block.append("</ul></div>")
+        return "\n          ".join(block)
 
+    loose = [p for p in posts if not p.folder]
+    folders = sorted({p.folder for p in posts if p.folder})
+
+    if folders:
+        # Loose posts go under a "Posts" heading; each folder is its own group.
+        if loose:
+            lines.append(group("Posts", loose))
+        for folder in folders:
+            folder_posts = [p for p in posts if p.folder == folder]
+            lines.append(group(folder_posts[0].folder_label, folder_posts))
+    else:
+        # No folders in use — a single flat list, as before (no "Posts" label).
+        lines.append(group("", loose))
+
+    lines.append('<p class="nav-empty" id="nav-no-results" hidden>No posts match.</p>')
     return "\n          ".join(lines)
 
 
@@ -506,7 +549,7 @@ def check_config(config: dict) -> None:
 # which the headings are. mark_text is measured against mark_bg, not the page.
 CONTRAST_TARGETS = {
     "text": 4.5, "muted": 4.5, "bold": 4.5, "italic": 4.5, "link": 4.5,
-    "h1": 3.0, "h2": 3.0, "h3": 3.0,
+    "title": 3.0, "h1": 3.0, "h2": 3.0, "h3": 3.0,
 }
 
 
@@ -764,14 +807,28 @@ def build(include_drafts: bool = False) -> None:
             content=body,
         )
 
-    # Home page
-    home_body = render(
-        home_tpl,
-        site_title=html.escape(site_title),
-        intro=html.escape(config.get("intro", "")),
-        posts=post_list_html(posts, ""),
-        count=str(len(posts)),
-    )
+    # Home page — from content/home.md if you've written one, else the built-in
+    # template. In home.md, a line that is just `{posts}` is replaced by the
+    # automatic post list; leave it out to hand-author the whole page.
+    home_src = CONTENT / "home.md"
+    if home_src.exists():
+        home_md = make_markdown()
+        rendered_home = process_body(home_md.convert(home_src.read_text(encoding="utf-8")), "")
+        # The first heading becomes the page title (gets the title colour, not h1).
+        rendered_home = re.sub(r"<h1(\s|>)", r'<h1 class="doc-title"\1', rendered_home, count=1)
+        post_list = post_list_html(posts, "")
+        rendered_home = re.sub(
+            r"<p>\s*\{posts\}\s*</p>", lambda _m: post_list, rendered_home, count=1
+        )
+        home_body = f'<article class="prose">\n{rendered_home}\n</article>'
+    else:
+        home_body = render(
+            home_tpl,
+            site_title=html.escape(site_title),
+            intro=html.escape(config.get("intro", "")),
+            posts=post_list_html(posts, ""),
+            count=str(len(posts)),
+        )
     write(DIST / "index.html", page_shell(
         doc=None, prefix="", title=site_title,
         description=config.get("tagline", ""), body=home_body,

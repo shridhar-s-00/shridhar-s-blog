@@ -58,13 +58,13 @@ Put your files in `assets/files/`. This works for `.pdf`, `.zip`, `.docx`, `.xls
 ## Lists
 
 1. Numbered lists work
-2. So do nested ones:
-   - like this
-   - and this
+2. So do nested ones — indent the nested items by **4 spaces**:
+    - like this
+    - and this
 3. Back to the top level
 
-- [x] Task lists render too
-- [ ] Handy for notes to yourself
+Separate a list from the paragraph above it with a blank line, or the lines
+fold together into one paragraph.
 
 ## Tables
 
