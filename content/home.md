@@ -1,7 +1,8 @@
 # Shridhar
 
-Hello. This is where I keep my notes and longer writing. Poke around, or jump
-straight into a post below.
+Hello, I'm Shridhar. I'm an Electronics and Communications Engineering Graduate from SSN College of Engineering. This is where I write about stuff I like, the stuff I work on and stuff I think is pretty cool. Have a look below and see if something interests you
+
+I like computers, videogames, music, food and stories. I'll be writing more about them here as I go on. For now, its going to be pretty barebones. Expect to see more pages in the coming weeks.
 
 {posts}
 
