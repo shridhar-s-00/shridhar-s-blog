@@ -129,3 +129,30 @@ link      = { light = "#1f5fbe", dark = "#7aa2f7" }
 # mark_text = { light = "#3d3400", dark = "#ffeea6" }   # ==highlight== text
 #
 # link      = { light = "#1a5fb4", dark = "#8ab4f8" }   # links
+#
+# # ─── PLN (Pipe Likes Nord) ───────────────────────────────────
+# Nord-based, both modes. github.com/pipeittodevnull/PLN
+# Some light-mode accents darkened from Nord for AA readability.
+
+[pln]
+# Syntax highlighting theme for fenced code blocks.
+code_light = "friendly"
+code_dark  = "nord"
+
+bg        = { light = "#f5f7f9", dark = "#2e3440" }
+surface   = { light = "#eceff4", dark = "#3b4252" }
+text      = { light = "#2e3440", dark = "#eceff4" }
+muted     = { light = "#434c5e", dark = "#d8dee9" }
+border    = { light = "#d8dee9", dark = "#4c566a" }
+
+h1        = { light = "#bf616a", dark = "#bf616a" }   # nord red
+h2        = { light = "#b86a48", dark = "#d08770" }   # nord orange
+h3        = { light = "#8a6d1f", dark = "#ebcb8b" }   # nord yellow
+
+bold      = { light = "#232831", dark = "#f5f7f9" }
+italic    = { light = "#4c566a", dark = "#e5e9f0" }
+
+mark_bg   = { light = "#dbcddb", dark = "#64586c" }   # nord purple wash
+mark_text = { light = "#4a3a52", dark = "#eceff4" }
+
+link      = { light = "#4c6a94", dark = "#81a1c1" }   # nord frost / blue

@@ -572,7 +572,7 @@ main {
    and it never takes space from the content: the wide-screen rail is
    fixed in the blank right margin, so the reading column is untouched.
    Hidden by default; the two media queries below turn it on as a rail
-   (wide screens) or a bottom-left popup (mobile).
+   (wide screens) or a bottom-right popup (mobile).
    ───────────────────────────────────────────────────────────── */
 
 .toc { display: none; }
@@ -616,7 +616,7 @@ main {
 
 .toc-fab {
   position: fixed;
-  left: 1rem;
+  right: 1rem;
   bottom: 1rem;
   z-index: 45;
   width: 3.2rem;
@@ -652,7 +652,7 @@ main {
   .toc-panel { display: block; }
 }
 
-/* Mobile: an unobtrusive button at the bottom-left that opens a popup.
+/* Mobile: an unobtrusive button at the bottom-right that opens a popup.
    (Between 900px and 1380px neither query matches, so there is no TOC —
    the left sidebar still handles navigation and the article is untouched.) */
 @media (max-width: 900px) {
@@ -661,7 +661,7 @@ main {
   .toc-panel {
     display: none;
     position: fixed;
-    left: 1rem;
+    right: 1rem;
     bottom: 4.3rem;
     z-index: 46;
     width: min(19rem, 82vw);
