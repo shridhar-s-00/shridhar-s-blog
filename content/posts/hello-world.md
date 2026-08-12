@@ -1,6 +1,7 @@
 ---
 Title: Hello, world
 Date: 2026-07-20
+Draft: true
 Summary: The first post — what this space is for and how it gets published.
 ---
 

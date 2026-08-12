@@ -1,9 +1,11 @@
 ---
 Title: Everything you can write in a post
 Date: 2026-07-22
+Draft: true
 Summary: A reference for every formatting feature this blog supports — headings, emphasis, highlights, images, downloads, tables and code.
 ---
 
+# Everything you must know
 This post is a working reference. Keep it around; delete it when you no longer need it.
 Everything below is plain markdown, and every feature shown here renders on your site.
 
