@@ -124,11 +124,6 @@ class Doc:
     def date_iso(self) -> str:
         return self.date.isoformat() if self.date else ""
 
-    @property
-    def read_time(self) -> str:
-        minutes = max(1, round(self.words / 220))
-        return f"{minutes} min read"
-
 
 def first_meta(meta: dict, key: str, default: str = "") -> str:
     values = meta.get(key)
@@ -453,7 +448,7 @@ def post_list_html(posts: list[Doc], prefix: str) -> str:
     for post in posts:
         cards.append(f"""<article class="post-card">
             <h2 class="post-card-title"><a href="{prefix}{post.url}">{html.escape(post.title)}</a></h2>
-            <p class="post-meta"><time datetime="{post.date_iso}">{post.date_display}</time> · {post.read_time}</p>
+            <p class="post-meta"><time datetime="{post.date_iso}">{post.date_display}</time></p>
             <p class="post-summary">{html.escape(post.summary)}</p>
           </article>""")
     return "\n          ".join(cards)
@@ -841,7 +836,7 @@ def build(include_drafts: bool = False) -> None:
         is_post = doc in posts
         meta_line = (
             f'<p class="post-meta"><time datetime="{doc.date_iso}">{doc.date_display}</time>'
-            f" · {doc.read_time}</p>"
+            f"</p>"
             if is_post else ""
         )
         body = render(
