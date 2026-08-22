@@ -623,6 +623,13 @@ main {
   border-left-color: var(--link);
   background: var(--surface);
 }
+/* Level 1 is the top of the outline — marked by weight and a brighter colour
+   rather than indent, so level-2 and level-3 entries keep the position they
+   already had. Selector matches `.toc-links a` specificity so it isn't lost. */
+.toc-links a.toc-l1 {
+  font-weight: 600;
+  color: var(--text);
+}
 .toc-l3 {
   padding-left: 1.6rem;
   font-size: 0.88rem;

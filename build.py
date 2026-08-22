@@ -459,9 +459,9 @@ TOC_MIN_ENTRIES = 2
 
 
 def _flatten_toc(tokens: list, out: list) -> None:
-    """Collect (level, "#anchor", name) for every H2/H3 in a rendered article."""
+    """Collect (level, "#anchor", name) for every H1/H2/H3 in a rendered article."""
     for token in tokens:
-        if token.get("level") in (2, 3) and token.get("id"):
+        if token.get("level") in (1, 2, 3) and token.get("id"):
             out.append((token["level"], "#" + token["id"], token.get("name", "")))
         _flatten_toc(token.get("children") or [], out)
 
@@ -479,7 +479,7 @@ def _toc_markup(entries: list, heading: str) -> str:
 
     items = []
     for level, href, label in entries:
-        cls = "toc-l2" if level == 2 else "toc-l3"
+        cls = f"toc-l{level}" if level in (1, 2, 3) else "toc-l3"
         # Heading text arrives with smarty's entities already in it (an
         # apostrophe is &rsquo;, "..." is &hellip;). Decode first, or escaping
         # would turn the & into &amp; and the entity would show as literal text.
