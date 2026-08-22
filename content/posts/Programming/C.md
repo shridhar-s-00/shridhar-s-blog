@@ -4,7 +4,9 @@ Date: 2026-08-10
 Summary: I'm writing a list that can store any generic value. I'm doing this to learn structs, unions, pointers, generic programming and some basic DSA.
 ---
 
-# Version 1
+# Linked lists in C
+
+## Version 1
 ```C
 #include <stdint.h>
 #include<stdio.h>
@@ -81,7 +83,7 @@ node update_node(int64_t value_i, double value_d, char* value_s, node* next_node
 // Here, I'm wasting a lot of parameters by passing the i64, f64 and strings separately. I can do better than that by passing a void pointer and a type.
 ```
 
-## Trying alternatives
+### Trying alternatives
 **Void Pointers:**  
 
 - This one is an improvement in that it drops all the redundancies and just pass 3 values instead of every single type and then the next node and type.  

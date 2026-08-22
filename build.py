@@ -480,7 +480,11 @@ def _toc_markup(entries: list, heading: str) -> str:
     items = []
     for level, href, label in entries:
         cls = "toc-l2" if level == 2 else "toc-l3"
-        items.append(f'<a class="{cls}" href="{html.escape(href)}">{html.escape(label)}</a>')
+        # Heading text arrives with smarty's entities already in it (an
+        # apostrophe is &rsquo;, "..." is &hellip;). Decode first, or escaping
+        # would turn the & into &amp; and the entity would show as literal text.
+        label = html.escape(html.unescape(label))
+        items.append(f'<a class="{cls}" href="{html.escape(href)}">{label}</a>')
     link_html = "\n        ".join(items)
 
     heading = html.escape(heading)
