@@ -19,7 +19,7 @@ intro = "Hello. This is where I keep my notes and longer writing."
 #     palette = "rose-pine"
 #
 # Or mix them — a different palette for light and for dark:
-palette = { light = "tokyo-night", dark = "tokyo-night" }
+palette = { light = "rose-pine", dark = "catppuccin" }
 #
 # Mixing is safe: the two modes never show at once, and each one is filled
 # in entirely from its own palette. See palettes.toml.
