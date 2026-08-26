@@ -134,30 +134,78 @@ link      = { light = "#1f5fbe", dark = "#7aa2f7" }
 #
 # link      = { light = "#1a5fb4", dark = "#8ab4f8" }   # links
 #
-# # ─── PLN (Pipe Likes Nord) ───────────────────────────────────
-# Nord-based, both modes. github.com/pipeittodevnull/PLN
-# Some light-mode accents darkened from Nord for AA readability.
 
-[pln]
+
+# ─── Rainbow ─────────────────────────────────────────────────
+# A violet-slate ground carrying a full-spectrum heading set.
+#
+# The tint is blue-violet on purpose: that is yellow's complement, so the
+# gold h2 — the one fragile colour in any rainbow palette — gets maximum
+# chromatic separation and reads richer than it would on white or cream.
+# Light mode stays very pale because dark-on-light contrast only improves
+# the lighter the ground goes; a deeper cream would hurt the gold.
+
+[rainbow]
 # Syntax highlighting theme for fenced code blocks.
-code_light = "friendly"
-code_dark  = "nord"
+code_light = "tango"
+code_dark  = "material"
 
-bg        = { light = "#f5f7f9", dark = "#2e3440" }
-surface   = { light = "#eceff4", dark = "#3b4252" }
-text      = { light = "#2e3440", dark = "#eceff4" }
-muted     = { light = "#434c5e", dark = "#d8dee9" }
-border    = { light = "#d8dee9", dark = "#4c566a" }
+bg        = { light = "#f6f5fa", dark = "#1a1626" }
+surface   = { light = "#eeedf6", dark = "#241f33" }
+text      = { light = "#23212e", dark = "#e4e0f0" }
+muted     = { light = "#5f5b72", dark = "#a49ebc" }
+border    = { light = "#e2dfec", dark = "#2e2942" }
 
-title     = { light = "#8a5a82", dark = "#b48ead" }   # nord purple (page title)
-h1        = { light = "#bf616a", dark = "#bf616a" }   # nord red
-h2        = { light = "#b86a48", dark = "#d08770" }   # nord orange
-h3        = { light = "#8a6d1f", dark = "#ebcb8b" }   # nord yellow
+title     = { light = "#2b4c9b", dark = "#7fa8f5" }   # deep blue
+h1        = { light = "#c42b3a", dark = "#f2707c" }   # red
+h2        = { light = "#a67c00", dark = "#f0c560" }   # gold / yellow
+h3        = { light = "#2e7d32", dark = "#8fd97a" }   # green
 
-bold      = { light = "#232831", dark = "#f5f7f9" }
-italic    = { light = "#4c566a", dark = "#e5e9f0" }
+bold      = { light = "#0f6e68", dark = "#5fd6c8" }   # teal
+italic    = { light = "#7b3fa0", dark = "#c0a0ec" }   # purple
 
-mark_bg   = { light = "#dbcddb", dark = "#64586c" }   # nord purple wash
-mark_text = { light = "#4a3a52", dark = "#eceff4" }
+mark_bg   = { light = "#fce9c4", dark = "#4a3a22" }   # peach-yellow
+mark_text = { light = "#6b4a08", dark = "#f5d9a0" }
 
-link      = { light = "#4c6a94", dark = "#81a1c1" }   # nord frost / blue
+link      = { light = "#2d5db8", dark = "#8ab4f8" }   # blue
+
+
+# ─── Ayu ─────────────────────────────────────────────────────
+# Ayu Light / Ayu Mirage, as rendered by Obsidian's Minimal theme.
+# Headings follow Ayu's syntax rainbow: markup red, keyword orange,
+# func yellow, entity blue. The page title takes entity blue so it is
+# distinct from the red h1.
+#
+# FAITHFUL — these are Ayu's own values, deliberately NOT adjusted for
+# contrast. Ayu Light is a low-contrast scheme by web standards and
+# several light-mode roles fall below WCAG AA; bold, italic and links
+# are the lowest at roughly 2.4:1. Dark mode is comfortable throughout.
+# Run ./build --check to see exactly where each value lands.
+#
+# Ayu's string green (#86b300) and constant purple (#a37acc) have no
+# slot in light mode — this site has four heading levels, not six.
+
+[ayu]
+# Syntax highlighting theme for fenced code blocks.
+code_light = "tango"
+code_dark  = "material"
+
+bg        = { light = "#fcfcfc", dark = "#1f2430" }
+surface   = { light = "#f3f4f5", dark = "#1a1f29" }
+text      = { light = "#5c6166", dark = "#cccac2" }
+muted     = { light = "#8a9199", dark = "#707a8c" }
+border    = { light = "#e6e7e9", dark = "#2d3343" }
+
+title     = { light = "#399ee6", dark = "#73d0ff" }   # entity blue
+h1        = { light = "#f07171", dark = "#f28779" }   # markup red
+h2        = { light = "#fa8d3e", dark = "#ffad66" }   # keyword orange
+h3        = { light = "#5f9f3f", dark = "#9ece6a" }   # green
+#h3        = { light = "#f2ae49", dark = "#ffd173" }   # func yellow
+
+bold      = { light = "#8c6dc9", dark = "#d4bfff" }   # dark purple / light purple
+italic    = { light = "#55b4d4", dark = "#5ccfe6" }   # tag cyan
+
+mark_bg   = { light = "#fff1c1", dark = "#c7a98b" }
+mark_text = { light = "#5c6166", dark = "#2b2417" }
+
+link      = { light = "#d10056", dark = "#e05891" }   # accent orange
