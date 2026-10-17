@@ -1,5 +1,5 @@
 ---
-Title: No, I don't think I have too many hobbies
+Title: No, I don't think having too many hobbies is bad
 Date: 2026-10-17
 Summary: Life's too short to do everything, but it's too long to do so little
 ---
