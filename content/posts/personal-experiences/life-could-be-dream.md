@@ -32,7 +32,7 @@ I also would like to collaborate with people to ease out the burden of having to
 
 
 ## What about professionals or AI? Either one can certainly do a better job.
-Every once in a while, I make food for the family. I still think the food sucks and isn't great, but for them, its great. I brought some pickled onions and carrots I made to college and we devoured that in 5 minutes raw ... I'm still proud of it even if it wasn't much.
+Every once in a while, I make food for the family. I still think the food sucks and isn't great, but they liked it. I brought some pickled onions and carrots I made to college and we devoured that in 5 minutes raw ... I'm still proud of it even if it wasn't much.
 
 
 And I think that holds true for everything I do and I believe its true of everyone too. This is the one reason I believe we have to build things even if someone or something can do it better than we ever could. Its personal and it meant something. I'm sure one day, AI could write a version of Lord of the Rings that would be good. But it won't have Tolkiens love for Life and languages or his pain for the battles he fought. I doubt that the person writing it with AI actually cares about what they do, why else would they not do it themselves? There will be reasons I'm sure, maybe even valid ones. **However, it takes away from us the pleasure of trying and the joy of giving. That is why we must make things**.
